@@ -1,0 +1,5 @@
+/target
+.superpowers/
+
+# Internal design notes, kept out of the public repository
+docs/superpowers/

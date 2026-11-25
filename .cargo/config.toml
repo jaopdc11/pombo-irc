@@ -1,0 +1,3 @@
+[env]
+# ring builds its C/asm with the system gcc when musl-gcc is absent
+CC_x86_64_unknown_linux_musl = "gcc"
