@@ -1,0 +1,40 @@
+pombo-irc License
+
+Note: this license is the MIT License with two additional conditions, numbered 1
+and 2 below. Because of those conditions it is not an OSI-approved open source
+license.
+
+Copyright (c) 2026 jaopdc11
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+1. Attribution. Redistributions of the Software, and derivative works based on
+   the Software, must keep the above copyright notice and this license, and
+   must credit the original project in their README or in an about screen
+   shown to users. The credit must read "based on pombo-irc by jaopdc11,
+   https://github.com/jaopdc11/pombo-irc", or equivalent wording that names
+   the project and its author and gives that address.
+
+2. Default server. Modified versions of the Software that are distributed, in
+   source or binary form, must not use a relay server operated by the original
+   author, meaning any host under the domain jaopd.dev, as their default,
+   preconfigured or built-in server. Such versions must instead default to a
+   relay that their distributor operates, or require the user to configure
+   one. This condition does not prevent a user from choosing such a server
+   through their own configuration.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
