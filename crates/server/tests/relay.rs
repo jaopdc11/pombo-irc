@@ -110,6 +110,7 @@ async fn member_disconnect_sends_member_left() {
     let mut dup = Raw::connect(&url).await;
     dup.send(ClientMsg::Hello {
         nick: "owner".into(),
+        version: proto::VERSION.into(),
     })
     .await;
     assert_eq!(dup.recv().await, ServerMsg::NickTaken);

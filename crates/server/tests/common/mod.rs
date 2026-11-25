@@ -42,7 +42,11 @@ impl Raw {
     /// Connects and greets with `nick`, expecting `NickOk`.
     pub async fn hello(url: &str, nick: &str) -> Raw {
         let mut raw = Raw::connect(url).await;
-        raw.send(ClientMsg::Hello { nick: nick.into() }).await;
+        raw.send(ClientMsg::Hello {
+            nick: nick.into(),
+            version: proto::VERSION.into(),
+        })
+        .await;
         assert_eq!(raw.recv().await, ServerMsg::NickOk, "hello {nick}");
         raw
     }
@@ -53,7 +57,11 @@ impl Raw {
         let deadline = Instant::now() + RECV_TIMEOUT;
         loop {
             let mut raw = Raw::connect(url).await;
-            raw.send(ClientMsg::Hello { nick: nick.into() }).await;
+            raw.send(ClientMsg::Hello {
+                nick: nick.into(),
+                version: proto::VERSION.into(),
+            })
+            .await;
             match raw.recv().await {
                 ServerMsg::NickOk => return raw,
                 ServerMsg::NickTaken if Instant::now() < deadline => {

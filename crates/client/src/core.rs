@@ -47,6 +47,8 @@ pub enum ConnectError {
     NickInvalid,
     #[error("network: {0}")]
     Network(String),
+    #[error("this pombo is out of date")]
+    UpdateRequired,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, thiserror::Error)]
@@ -244,6 +246,7 @@ impl Conn {
             let mut link = Link::open(url).await.map_err(ConnectError::Network)?;
             link.send(ClientMsg::Hello {
                 nick: nick.to_owned(),
+                version: proto::VERSION.to_owned(),
             })
             .map_err(|_| ConnectError::Network("connection closed".into()))?;
             loop {
@@ -251,6 +254,7 @@ impl Conn {
                     Some(ServerMsg::NickOk) => return Ok(link),
                     Some(ServerMsg::NickTaken) => return Err(ConnectError::NickTaken),
                     Some(ServerMsg::NickInvalid) => return Err(ConnectError::NickInvalid),
+                    Some(ServerMsg::UpdateRequired) => return Err(ConnectError::UpdateRequired),
                     Some(_) => {}
                     None => return Err(ConnectError::Network("connection closed".into())),
                 }

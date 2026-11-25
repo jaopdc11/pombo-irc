@@ -16,6 +16,7 @@ async fn nick_ok_then_taken_then_freed() {
     let mut b = Raw::connect(&url).await;
     b.send(ClientMsg::Hello {
         nick: "user1".into(),
+        version: proto::VERSION.into(),
     })
     .await;
     assert_eq!(b.recv().await, ServerMsg::NickTaken);
@@ -28,7 +29,11 @@ async fn nick_ok_then_taken_then_freed() {
 async fn invalid_nick() {
     let url = start(config()).await;
     let mut a = Raw::connect(&url).await;
-    a.send(ClientMsg::Hello { nick: "a b".into() }).await;
+    a.send(ClientMsg::Hello {
+        nick: "a b".into(),
+        version: proto::VERSION.into(),
+    })
+    .await;
     assert_eq!(a.recv().await, ServerMsg::NickInvalid);
     a.closed().await;
 }
@@ -465,4 +470,16 @@ async fn long_room_list_is_capped_to_the_oldest() {
     oldest.sort();
     let names: Vec<String> = listed.into_iter().map(|r| r.name).collect();
     assert_eq!(names, oldest);
+}
+
+#[tokio::test]
+async fn other_version_must_update() {
+    let url = common::start(common::config()).await;
+    let mut raw = common::Raw::connect(&url).await;
+    raw.send(proto::ClientMsg::Hello {
+        nick: "old".into(),
+        version: "0000000000aa".into(),
+    })
+    .await;
+    assert_eq!(raw.recv().await, proto::ServerMsg::UpdateRequired);
 }

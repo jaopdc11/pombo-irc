@@ -89,6 +89,15 @@ To install system-wide instead:
 PREFIX=/usr/local sudo -E ./install.sh
 ```
 
+The relay only accepts clients built from the same commit it runs. When it is updated, `pombo`
+tells you so and refuses to start; update from the folder you cloned:
+
+```sh
+git pull && ./install.sh
+```
+
+`pombo --version` prints the commit your client was built from.
+
 To uninstall (use the same `PREFIX` you installed with):
 
 ```sh

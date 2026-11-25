@@ -51,7 +51,7 @@ connected clients; room names are unique among open rooms.
 
 | # | Message                                    | Meaning                                                                                       |
 |---|--------------------------------------------|-----------------------------------------------------------------------------------------------|
-| 0 | `Hello { nick: String }`                   | Must be the first message on a connection. Claims a nick.                                     |
+| 0 | `Hello { nick: String, version: String }`  | Must be the first message on a connection. Claims a nick. `version` is the git commit the client was built from. |
 | 1 | `CreateRoom { name: String }`              | Create a room and become its owner. Only valid when in no room and not knocking.              |
 | 2 | `ListRooms`                                | Ask for the list of rooms this client could join.                                             |
 | 3 | `Join { room: String }`                    | Knock on a room. Only valid when in no room and not knocking. One knock at a time.            |
@@ -86,6 +86,7 @@ connection**. The client opens a new connection when it returns to the nick prom
 | 13 | `MemberLeft { nick: String }`                              | Remaining members: `nick` left or disconnected.                                                |
 | 14 | `OwnerChanged { owner: String }`                           | Remaining members: the owner left and `owner` (the oldest remaining member) now owns the room. |
 | 15 | `Relay { from: String, bytes: Vec<u8> }`                   | An end-to-end payload from the member `from`. `from` is set by the relay, not by the sender.   |
+| 16 | `UpdateRequired`                                           | The client was built from a different commit than the relay. The connection closes.            |
 
 `RoomInfo` is:
 
@@ -107,7 +108,8 @@ sorted by name.
 ### Connecting
 
 1. The client opens the WebSocket and sends `Hello { nick }` within 10 seconds.
-2. The relay answers `NickOk`, or `NickTaken` / `NickInvalid` and closes.
+2. The relay answers `UpdateRequired` and closes if `version` differs from its own build commit;
+   otherwise `NickOk`, or `NickTaken` / `NickInvalid` and closes.
 
 ### Creating a room
 

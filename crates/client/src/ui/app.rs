@@ -108,6 +108,10 @@ enum Input {
     Tick,
 }
 
+/// Shown when the relay runs a different commit; the client refuses to run.
+const UPDATE_REQUIRED: &str =
+    "this version is out of date. Update it from the folder you cloned: git pull && ./install.sh";
+
 struct App {
     url: String,
     term: Term,
@@ -785,6 +789,9 @@ impl App {
                         "nick must be 1-16 letters, digits, _ or -".to_owned()
                     }
                     ConnectError::Network(_) => "cannot reach the server".to_owned(),
+                    ConnectError::UpdateRequired => {
+                        return Err(io::Error::other(UPDATE_REQUIRED));
+                    }
                 };
                 self.screen = Screen::Nick { error: Some(msg) };
             }

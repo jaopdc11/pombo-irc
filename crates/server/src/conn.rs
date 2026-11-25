@@ -100,9 +100,12 @@ pub(crate) async fn run(tcp: TcpStream, hub: Arc<Mutex<Hub>>, cfg: Arc<ServerCon
     let (mut sink, mut stream) = ws.split();
     let mut bucket = Bucket::new(cfg.rate_per_sec, cfg.rate_burst);
 
-    let Some(nick) = read_hello(&mut stream, &mut bucket, hello_deadline).await else {
+    let Some((nick, version)) = read_hello(&mut stream, &mut bucket, hello_deadline).await else {
         return finish(sink, None).await;
     };
+    if version != proto::VERSION {
+        return finish(sink, Some(ServerMsg::UpdateRequired)).await;
+    }
     if !valid_nick(&nick) {
         return finish(sink, Some(ServerMsg::NickInvalid)).await;
     }
@@ -179,7 +182,11 @@ pub(crate) async fn run(tcp: TcpStream, hub: Arc<Mutex<Hub>>, cfg: Arc<ServerCon
 }
 
 /// Reads frames until the first protocol message; it must be `Hello`.
-async fn read_hello(stream: &mut Stream, bucket: &mut Bucket, deadline: Instant) -> Option<String> {
+async fn read_hello(
+    stream: &mut Stream,
+    bucket: &mut Bucket,
+    deadline: Instant,
+) -> Option<(String, String)> {
     loop {
         let Ok(Some(Ok(msg))) = timeout_at(deadline, stream.next()).await else {
             return None;
@@ -190,7 +197,7 @@ async fn read_hello(stream: &mut Stream, bucket: &mut Bucket, deadline: Instant)
         match msg {
             Message::Binary(bytes) => {
                 return match decode::<ClientMsg>(&bytes) {
-                    Ok(ClientMsg::Hello { nick }) => Some(nick),
+                    Ok(ClientMsg::Hello { nick, version }) => Some((nick, version)),
                     _ => None,
                 };
             }

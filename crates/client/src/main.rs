@@ -40,6 +40,10 @@ fn exit_on_term_signals() {
 }
 
 fn main() {
+    if std::env::args().nth(1).as_deref() == Some("--version") {
+        println!("pombo {}", proto::VERSION);
+        return;
+    }
     harden::apply();
     exit_on_term_signals();
     let default_hook = std::panic::take_hook();

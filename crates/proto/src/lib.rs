@@ -7,6 +7,9 @@ use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 
 /// Largest WebSocket message either side accepts, in bytes.
+/// Git commit of this build. Client and relay must match exactly.
+pub const VERSION: &str = env!("POMBO_VERSION");
+
 pub const MAX_FRAME: usize = 8192;
 /// Plaintext is padded to a multiple of this many bytes before encryption.
 pub const PAD_BLOCK: usize = 256;
@@ -39,6 +42,7 @@ pub struct RoomInfo {
 pub enum ClientMsg {
     Hello {
         nick: String,
+        version: String,
     },
     CreateRoom {
         name: String,
@@ -104,6 +108,8 @@ pub enum ServerMsg {
         from: String,
         bytes: Vec<u8>,
     },
+    /// The client was built from a different commit than the relay.
+    UpdateRequired,
 }
 
 /// A frame that could not be decoded.
@@ -158,6 +164,7 @@ mod tests {
         for m in [
             ClientMsg::Hello {
                 nick: "user1".into(),
+                version: VERSION.into(),
             },
             ClientMsg::CreateRoom {
                 name: "sala".into(),
