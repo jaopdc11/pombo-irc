@@ -1,0 +1,34 @@
+[package]
+name = "pombo-irc"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+publish = false
+
+[lib]
+name = "pombo_irc"
+path = "src/lib.rs"
+
+[[bin]]
+name = "pombo"
+path = "src/main.rs"
+
+[dependencies]
+proto.workspace = true
+e2e.workspace = true
+tokio.workspace = true
+tokio-tungstenite = { workspace = true, features = ["rustls-tls-webpki-roots"] }
+# rustls ships no crypto provider through tokio-tungstenite; ring builds cleanly on musl.
+rustls.workspace = true
+futures-util.workspace = true
+zeroize.workspace = true
+libc.workspace = true
+ratatui.workspace = true
+crossterm.workspace = true
+unicode-width.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+server.workspace = true
+proto.workspace = true
+tokio.workspace = true
