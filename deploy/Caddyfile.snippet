@@ -1,0 +1,5 @@
+# Template. Append to the Caddyfile on the host and reload Caddy.
+# Access logging is intentionally off for this site: do NOT add a `log` directive here.
+pombo.api.jaopd.dev {
+	reverse_proxy 127.0.0.1:7466
+}

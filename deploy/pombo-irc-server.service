@@ -1,0 +1,35 @@
+# Template. Copy to /etc/systemd/system/ and adjust before use.
+[Unit]
+Description=pombo-irc relay server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/pombo-irc-server
+Environment=POMBO_BIND=127.0.0.1:7466
+# Dedicated unprivileged user, created by systemd for this service only.
+DynamicUser=yes
+StandardOutput=journal
+StandardError=journal
+Restart=on-failure
+RestartSec=2
+
+# Hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+MemoryDenyWriteExecute=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6
+RestrictNamespaces=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+LimitCORE=0
+
+[Install]
+WantedBy=multi-user.target
