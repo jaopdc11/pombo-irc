@@ -110,7 +110,6 @@ enum Input {
 
 struct App {
     url: String,
-    host: String,
     term: Term,
     height: u16,
     screen: Screen,
@@ -131,10 +130,8 @@ pub async fn run(url: String) -> io::Result<()> {
     input.extend(std::iter::repeat_n('\0', INPUT_CAP));
     harden::lock(input.as_bytes());
     input.clear();
-    let host = host_of(&url);
     let mut app = App {
         url,
-        host,
         term: new_term(1)?,
         height: 1,
         screen: Screen::Nick { error: None },
@@ -160,11 +157,6 @@ fn new_term(height: u16) -> io::Result<Term> {
             viewport: Viewport::Inline(height.max(1)),
         },
     )
-}
-
-fn host_of(url: &str) -> String {
-    let rest = url.split_once("://").map_or(url, |(_, r)| r);
-    rest.split('/').next().unwrap_or(rest).to_owned()
 }
 
 /// Local wall-clock time as (hour, minute).
@@ -280,7 +272,7 @@ impl App {
 
     fn view(&self, width: u16) -> Vec<Line<'static>> {
         let mut out: Vec<Line<'static>> = Vec::new();
-        let host_seg = seg(format!(" ● {} ", self.host), fg(OK));
+        let host_seg = seg(" ● server ".to_owned(), fg(OK));
         match &self.screen {
             Screen::Nick { error } => {
                 out.extend(logo::lines(logo::pick(width)));
@@ -710,7 +702,7 @@ impl App {
                 Ok(())
             }
             Err(_) => {
-                let e = format!("connection to {} lost", self.host);
+                let e = "connection to the server lost".to_owned();
                 self.back_to_nick(Some(e)).await
             }
         }
@@ -756,7 +748,7 @@ impl App {
                         Ok(())
                     }
                     Err(_) => {
-                        let e = format!("connection to {} lost", self.host);
+                        let e = "connection to the server lost".to_owned();
                         self.back_to_nick(Some(e)).await
                     }
                 }
@@ -777,7 +769,7 @@ impl App {
             return Ok(());
         }
         self.screen = Screen::Nick {
-            error: Some(format!("connecting to {}...", self.host)),
+            error: Some("connecting to the server...".to_owned()),
         };
         self.draw()?;
         match Conn::connect(&self.url, nick).await {
@@ -792,7 +784,7 @@ impl App {
                     ConnectError::NickInvalid => {
                         "nick must be 1-16 letters, digits, _ or -".to_owned()
                     }
-                    ConnectError::Network(_) => format!("cannot reach {}", self.host),
+                    ConnectError::Network(_) => "cannot reach the server".to_owned(),
                 };
                 self.screen = Screen::Nick { error: Some(msg) };
             }
@@ -820,7 +812,7 @@ impl App {
                     CreateError::NameInvalid => INVALID,
                     CreateError::Core(CoreError::Timeout) => "server did not answer",
                     CreateError::Core(_) => {
-                        let e = format!("connection to {} lost", self.host);
+                        let e = "connection to the server lost".to_owned();
                         return self.back_to_nick(Some(e)).await;
                     }
                 };
@@ -1106,7 +1098,7 @@ impl App {
                 }
             }
             Err(_) => {
-                let e = format!("connection to {} lost", self.host);
+                let e = "connection to the server lost".to_owned();
                 self.back_to_nick(Some(e)).await
             }
         }
