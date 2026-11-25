@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="910" height="119" viewBox="0 0 910.4 119.4" role="img" aria-label="pombo-irc">
+  <title>pombo-irc</title>
+  <defs>
+    <linearGradient id="g" gradientUnits="userSpaceOnUse" x1="4.0" y1="0" x2="906.4" y2="0">
+      <stop offset="0" stop-color="#7dd3c0"/>
+      <stop offset="1" stop-color="#c49cf0"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#g)" stroke="url(#g)" stroke-width="0.5" stroke-linejoin="miter" font-family="'JetBrains Mono', 'DejaVu Sans Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="16" xml:space="preserve">
+    <text y="18.85"><tspan x="100.0 109.6 119.2 128.8 138.4">▄███▄</tspan><tspan x="234.4 244.0 253.6 263.2 272.8 282.4">██████</tspan><tspan x="320.8 330.4 340.0 349.6 359.2 368.8">██████</tspan><tspan x="397.6 407.2 416.8">███</tspan><tspan x="464.8 474.4 484.0">███</tspan><tspan x="503.2 512.8 522.4 532.0 541.6 551.2">██████</tspan><tspan x="589.6 599.2 608.8 618.4 628.0 637.6">██████</tspan></text>
+    <text y="37.41"><tspan x="100.0 109.6 119.2 128.8 138.4 148.0 157.6">██▄███▄</tspan><tspan x="224.8 234.4">██</tspan><tspan x="272.8 282.4">██</tspan><tspan x="301.6 311.2">██</tspan><tspan x="359.2 368.8">██</tspan><tspan x="388.0 397.6 407.2 416.8">████</tspan><tspan x="445.6 455.2 464.8 474.4">████</tspan><tspan x="493.6 503.2">██</tspan><tspan x="541.6 551.2">██</tspan><tspan x="570.4 580.0">██</tspan><tspan x="628.0 637.6">██</tspan><tspan x="743.2 752.8">▀▀</tspan></text>
+    <text y="55.97"><tspan x="42.4 52.0 61.6 71.2 80.8 90.4 100.0 109.6 119.2 128.8 138.4">▄▄▄▄▄█████▀</tspan><tspan x="215.2 224.8 234.4 244.0 253.6 263.2">██████</tspan><tspan x="292.0 301.6">██</tspan><tspan x="349.6 359.2">██</tspan><tspan x="378.4 388.0">██</tspan><tspan x="407.2 416.8 426.4 436.0">████</tspan><tspan x="455.2 464.8">██</tspan><tspan x="484.0 493.6 503.2 512.8 522.4 532.0">██████</tspan><tspan x="560.8 570.4">██</tspan><tspan x="618.4 628.0">██</tspan><tspan x="733.6 743.2">██</tspan><tspan x="772.0 781.6 791.2 800.8 810.4 820.0">██▄▀▀▀</tspan><tspan x="848.8 858.4 868.0 877.6 887.2 896.8">▄█▀▀▀▀</tspan></text>
+    <text y="74.53"><tspan x="4.0 13.6 23.2 32.8 42.4 52.0 61.6 71.2 80.8 90.4 100.0 109.6 119.2 128.8">▄▄████████████</tspan><tspan x="205.6 215.2">██</tspan><tspan x="282.4 292.0">██</tspan><tspan x="340.0 349.6">██</tspan><tspan x="368.8 378.4">██</tspan><tspan x="407.2 416.8">██</tspan><tspan x="445.6 455.2">██</tspan><tspan x="474.4 484.0">██</tspan><tspan x="522.4 532.0">██</tspan><tspan x="551.2 560.8">██</tspan><tspan x="608.8 618.4">██</tspan><tspan x="666.4 676.0 685.6 695.2">▀▀▀▀</tspan><tspan x="724.0 733.6">██</tspan><tspan x="762.4 772.0">██</tspan><tspan x="839.2 848.8">██</tspan></text>
+    <text y="93.09"><tspan x="13.6 23.2 32.8 42.4 52.0 61.6 71.2 80.8 90.4 100.0 109.6 119.2 128.8">▀▀██████████▀</tspan><tspan x="196.0 205.6">██</tspan><tspan x="282.4 292.0 301.6 311.2 320.8 330.4">██████</tspan><tspan x="359.2 368.8">██</tspan><tspan x="436.0 445.6">██</tspan><tspan x="464.8 474.4 484.0 493.6 503.2 512.8">██████</tspan><tspan x="551.2 560.8 570.4 580.0 589.6 599.2">██████</tspan><tspan x="714.4 724.0">██</tspan><tspan x="752.8 762.4">██</tspan><tspan x="829.6 839.2 848.8 858.4 868.0 877.6">▀█▄▄▄▄</tspan></text>
+    <text y="111.65"><tspan x="61.6 71.2">█▄</tspan><tspan x="100.0 109.6">█▄</tspan></text>
+  </g>
+</svg>
