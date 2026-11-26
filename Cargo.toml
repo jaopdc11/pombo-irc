@@ -21,6 +21,7 @@ postcard = { version = "1.1.3", default-features = false, features = ["use-std"]
 snow = "0.10.0"
 zeroize = "1.9.1"
 libc = "0.2.191"
+windows-sys = "0.59.0"
 ratatui = "0.29.0"
 crossterm = { version = "0.28.1", features = ["event-stream"] }
 # ratatui 0.29 pins unicode-width =0.2.0

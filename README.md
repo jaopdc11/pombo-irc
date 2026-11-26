@@ -34,8 +34,9 @@ without opening it.
 - **Fingerprints.** Every member can compare a short fingerprint with the owner over another
   channel to rule out a man in the middle.
 - **Works on restrictive networks.** The client speaks WebSocket over TLS on port 443.
-- **Hardened client.** Core dumps are disabled, the input buffer is locked in memory, and all
-  text received from the network is stripped of terminal escape sequences before display.
+- **Hardened client.** Other processes of the same user cannot read its memory, crash dumps are
+  disabled (Linux) or leave the heap out (Windows), the input buffer is locked in memory, and
+  all text received from the network is stripped of terminal escape sequences before display.
 
 ## A session
 
@@ -70,8 +71,10 @@ and then sees the same fingerprint, `7F3A-91C2-0B4E-D15A`, pinned in his status 
 
 ## Install
 
-pombo-irc runs on Linux. Building it needs [Rust](https://rustup.rs) and a C compiler (the TLS
-library compiles some C).
+pombo-irc runs on Linux and Windows 10 or later. Building it needs [Rust](https://rustup.rs)
+and a C compiler (the TLS library compiles some C).
+
+### Linux
 
 ```sh
 git clone https://github.com/jaopdc11/pombo-irc.git
@@ -108,6 +111,32 @@ To build by hand, `cargo build --release -p pombo-irc` produces `target/release/
 fully static binary can be built with
 `cargo build --release --target x86_64-unknown-linux-musl -p pombo-irc` after
 `rustup target add x86_64-unknown-linux-musl`.
+
+### Windows
+
+Install [Rust](https://rustup.rs) with `rustup-init.exe` (let it set up the Visual Studio Build
+Tools when it asks; they bring the linker and the C compiler) and [git](https://git-scm.com).
+Then, in PowerShell:
+
+```powershell
+git clone https://github.com/jaopdc11/pombo-irc.git
+cd pombo-irc
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+`install.ps1` builds the client and installs it as `%LOCALAPPDATA%\Programs\pombo\pombo.exe`,
+adding that folder to your user `PATH`. Open a new terminal and run `pombo`. To update, run
+`git pull` and the script again; to uninstall, run it with `-Uninstall`. git is required: the
+build stamps the commit into the binary, and the relay refuses clients without it.
+
+Use [Windows Terminal](https://aka.ms/terminal) (the default on Windows 11). The legacy console
+window works but draws the logo and panels poorly. Pasting several lines at once sends them as
+separate messages, since the Windows console delivers a paste as individual key presses.
+
+A Windows binary can also be cross-built from Linux with
+[cargo-zigbuild](https://github.com/rust-cross/cargo-zigbuild):
+`cargo zigbuild --release --target x86_64-pc-windows-gnu -p pombo-irc --bin pombo` after
+`rustup target add x86_64-pc-windows-gnu`.
 
 ## Usage
 

@@ -16,6 +16,7 @@ fn restore_terminal() {
 /// Blocks SIGTERM and SIGHUP in this thread (and so in every thread started after it) and
 /// waits for them on a thread of their own, which restores the terminal and exits.
 /// Must run before any other thread exists.
+#[cfg(unix)]
 fn exit_on_term_signals() {
     // SAFETY: `sigset_t` is plain data; the libc calls get valid pointers to it.
     let set = unsafe {
@@ -37,6 +38,29 @@ fn exit_on_term_signals() {
             std::process::exit(128 + sig);
         }
     });
+}
+
+/// Restores the terminal and exits when the console window is closed or the user logs off
+/// or shuts down. Ctrl+C and Ctrl+Break keep their default handling; in raw mode Ctrl+C
+/// reaches the app as a key anyway.
+#[cfg(windows)]
+fn exit_on_term_signals() {
+    use windows_sys::Win32::System::Console::{
+        SetConsoleCtrlHandler, CTRL_CLOSE_EVENT, CTRL_LOGOFF_EVENT, CTRL_SHUTDOWN_EVENT,
+    };
+
+    unsafe extern "system" fn on_ctrl(event: u32) -> windows_sys::Win32::Foundation::BOOL {
+        match event {
+            CTRL_CLOSE_EVENT | CTRL_LOGOFF_EVENT | CTRL_SHUTDOWN_EVENT => {
+                restore_terminal();
+                std::process::exit(1);
+            }
+            _ => 0,
+        }
+    }
+
+    // SAFETY: `on_ctrl` is a valid handler for the whole life of the process.
+    unsafe { SetConsoleCtrlHandler(Some(on_ctrl), 1) };
 }
 
 fn main() {

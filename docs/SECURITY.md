@@ -212,15 +212,27 @@ relay hands it against the same rule.
 
 ## Memory hardening
 
-"Nothing on disk" leaks in practice through core dumps and swap. At startup the client:
+"Nothing on disk" leaks in practice through core dumps and swap. At startup the client, on
+Linux:
 
 - marks the process non-dumpable (`prctl(PR_SET_DUMPABLE, 0)`), which also blocks other
   processes of the same user from attaching with `ptrace`;
 - sets `RLIMIT_CORE` to 0.
 
+On Windows:
+
+- replaces the process DACL so the user's other processes may only wait on, query and
+  terminate it: no memory reads, no handle duplication, no injected threads, no dumps taken
+  through `OpenProcess`. SYSTEM keeps full access. A process of the same user can still rewrite
+  the DACL, since the user owns the object, and administrators with `SeDebugPrivilege` bypass it;
+  this stops casual dumping (Task Manager, ProcDump), not a determined local attacker;
+- tells Windows Error Reporting to leave the heap out of crash reports and not to show a
+  fault dialog.
+
 While running it:
 
-- `mlock`s the input buffer, best effort (failure is not fatal);
+- locks the input buffer in memory (`mlock` / `VirtualLock`), best effort (failure is not
+  fatal);
 - keeps room keys and decrypted text in buffers that are zeroized when dropped, and wipes the
   input line after each submit;
 - discards all key material when you leave a room or the connection drops.

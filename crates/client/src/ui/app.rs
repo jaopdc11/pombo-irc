@@ -129,7 +129,8 @@ struct App {
 pub async fn run(url: String) -> io::Result<()> {
     enable_raw_mode()?;
     let _restore = Restore;
-    execute!(io::stdout(), EnableBracketedPaste)?;
+    // Consoles without VT support (old conhost) refuse this; typed input still works there.
+    let _ = execute!(io::stdout(), EnableBracketedPaste);
     let mut input = Zeroizing::new(String::with_capacity(INPUT_CAP));
     input.extend(std::iter::repeat_n('\0', INPUT_CAP));
     harden::lock(input.as_bytes());
@@ -164,6 +165,19 @@ fn new_term(height: u16) -> io::Result<Term> {
 }
 
 /// Local wall-clock time as (hour, minute).
+#[cfg(windows)]
+fn now_hm() -> (u8, u8) {
+    // SAFETY: GetLocalTime fills the local struct it is given.
+    let t = unsafe {
+        let mut t: windows_sys::Win32::Foundation::SYSTEMTIME = std::mem::zeroed();
+        windows_sys::Win32::System::SystemInformation::GetLocalTime(&mut t);
+        t
+    };
+    (t.wHour as u8, t.wMinute as u8)
+}
+
+/// Local wall-clock time as (hour, minute).
+#[cfg(unix)]
 fn now_hm() -> (u8, u8) {
     // SAFETY: `time` accepts a null pointer; `localtime_r` writes into a local, zeroed `tm`.
     unsafe {
